@@ -28,8 +28,8 @@ public class Main {
     static JedisPooled jedisPooledHost1 = null;
     static JedisPooled jedisPooledHost2 = null;
     static long sleepTimeMillis = 10;
-    static long outerLoopSize = 100;
-    static long innerLoopSize = 50;
+    static int outerLoopSize = 100;
+    static int innerLoopSize = 50;
     static JedisConnectionHelper jedisConnectionHelper1 = null;
     static JedisConnectionHelper jedisConnectionHelper2 = null;
 
@@ -67,12 +67,12 @@ public class Main {
             }
             if (argList.contains("--outerloopsize")) {
                 int argIndex = argList.indexOf("--outerloopsize");
-                outerLoopSize = Long.parseLong(argList.get(argIndex + 1));
+                outerLoopSize = Integer.parseInt(argList.get(argIndex + 1));
                 System.out.println("loading custom --outerloopsize == " + outerLoopSize);
             }
             if (argList.contains("--innerloopsize")) {
                 int argIndex = argList.indexOf("--innerloopsize");
-                innerLoopSize = Long.parseLong(argList.get(argIndex + 1));
+                innerLoopSize = Integer.parseInt(argList.get(argIndex + 1));
                 System.out.println("loading custom --innerloopsize == " + innerLoopSize);
             }
             if (argList.contains("--username")) {
@@ -100,7 +100,7 @@ public class Main {
         }
 
         System.out.println("connecting to "+host1+" on port "+port);
-        jedisConnectionHelper1 = new JedisConnectionHelper(host1,port,username,password,200);
+        jedisConnectionHelper1 = new JedisConnectionHelper(host1,port,username,password,outerLoopSize);
         jedisPooledHost1 = jedisConnectionHelper1.getPooledJedis();
         sleep(sleepTimeMillis);
         System.out.println(jedisPooledHost1.lpush("l"+streamName,"pong"));
