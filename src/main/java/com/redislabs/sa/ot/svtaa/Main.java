@@ -38,6 +38,7 @@ public class Main {
         String streamName = "x:mystream";
         String username = "default";
         String password = "";
+        String password2 = "";
         String host1 = "localhost";
         String host2 = "localhost"; //should be the address of the peer Active Active instance
         int port = 7001;
@@ -84,6 +85,13 @@ public class Main {
                 password = argList.get(argIndex + 1);
                 System.out.println("loading custom --password == " + password);
             }
+            if (argList.contains("--password2")) {
+                int argIndex = argList.indexOf("--password2");
+                password2 = argList.get(argIndex + 1);
+                System.out.println("loading custom --password2 == " + password2);
+            }else{
+                password2=password;
+            }
             if (argList.contains("--sleeptimemillis")) {
                 int argIndex = argList.indexOf("--sleeptimemillis");
                 sleepTimeMillis = Long.parseLong(argList.get(argIndex + 1));
@@ -98,7 +106,7 @@ public class Main {
         System.out.println(jedisPooledHost1.lpush("l"+streamName,"pong"));
 
         System.out.println("connecting to "+host2+" on port "+port);
-        jedisConnectionHelper2 = new JedisConnectionHelper(host2,port,username,password,200);
+        jedisConnectionHelper2 = new JedisConnectionHelper(host2,port,username,password2,200);
         jedisPooledHost2 = jedisConnectionHelper2.getPooledJedis();
         sleep(sleepTimeMillis);
         System.out.println(jedisPooledHost1.lpop("l"+streamName));
